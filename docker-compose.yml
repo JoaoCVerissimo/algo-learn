@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: ./packages/api
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      DATABASE_URL: /app/data/algo-learn.db
+      RUNNER_IMAGE: algo-learn-runner:latest
+      PORT: "3001"
+      HOST: "0.0.0.0"
+    depends_on:
+      runner:
+        condition: service_completed_successfully
+
+  frontend:
+    build:
+      context: ./packages/frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+  runner:
+    build:
+      context: ./packages/runner
+      dockerfile: Dockerfile
+    image: algo-learn-runner:latest
+    entrypoint: ["echo", "Runner image built successfully"]

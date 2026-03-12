@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlgoLearn — How It Works</title>
+  <style>
+    :root {
+      --indigo-50: #eef2ff;
+      --indigo-100: #e0e7ff;
+      --indigo-200: #c7d2fe;
+      --indigo-400: #818cf8;
+      --indigo-500: #6366f1;
+      --indigo-600: #4f46e5;
+      --indigo-700: #4338ca;
+      --indigo-900: #312e81;
+      --purple-50: #faf5ff;
+      --purple-100: #f3e8ff;
+      --purple-400: #c084fc;
+      --purple-500: #a855f7;
+      --purple-600: #9333ea;
+      --green-50: #f0fdf4;
+      --green-100: #dcfce7;
+      --green-400: #4ade80;
+      --green-500: #22c55e;
+      --green-600: #16a34a;
+      --amber-50: #fffbeb;
+      --amber-100: #fef3c7;
+      --amber-400: #fbbf24;
+      --amber-500: #f59e0b;
+      --red-50: #fef2f2;
+      --red-100: #fee2e2;
+      --red-400: #f87171;
+      --red-500: #ef4444;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.05);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,.08), 0 4px 6px rgba(0,0,0,.04);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      color: var(--gray-800);
+      background: var(--gray-50);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--indigo-600) 0%, var(--purple-600) 100%);
+      color: white;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-content { position: relative; max-width: 800px; margin: 0 auto; }
+    .hero h1 { font-size: 3rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1rem; }
+    .hero p { font-size: 1.25rem; opacity: 0.9; max-width: 600px; margin: 0 auto 2rem; }
+    .hero-badges { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: rgba(255,255,255,0.18); backdrop-filter: blur(4px);
+      padding: .45rem 1rem; border-radius: 999px; font-size: .85rem; font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    /* ── Layout ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    section { padding: 4rem 0; }
+    section + section { border-top: 1px solid var(--gray-200); }
+    .section-label {
+      text-transform: uppercase; font-size: .75rem; font-weight: 700;
+      letter-spacing: 0.08em; color: var(--indigo-500); margin-bottom: .5rem;
+    }
+    .section-title { font-size: 2rem; font-weight: 700; margin-bottom: .75rem; letter-spacing: -0.01em; }
+    .section-subtitle { color: var(--gray-500); font-size: 1.05rem; max-width: 640px; margin-bottom: 2.5rem; }
+
+    /* ── Cards ── */
+    .card-grid { display: grid; gap: 1.5rem; }
+    .card-grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .card-grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .card-grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+    .card {
+      background: white; border-radius: var(--radius); padding: 1.75rem;
+      box-shadow: var(--shadow); border: 1px solid var(--gray-200);
+      transition: box-shadow .2s, transform .2s;
+    }
+    .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .card-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 1rem;
+    }
+    .card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: .4rem; }
+    .card p { color: var(--gray-500); font-size: .92rem; }
+
+    /* ── Flow Diagram ── */
+    .flow {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; flex-wrap: wrap; margin: 2rem 0;
+    }
+    .flow-node {
+      background: white; border: 2px solid var(--indigo-200);
+      border-radius: var(--radius-sm); padding: 1rem 1.5rem;
+      text-align: center; min-width: 140px; box-shadow: var(--shadow);
+    }
+    .flow-node strong { display: block; font-size: .95rem; color: var(--indigo-700); }
+    .flow-node span { font-size: .8rem; color: var(--gray-500); }
+    .flow-arrow {
+      color: var(--indigo-400); font-size: 1.5rem; padding: 0 .5rem;
+      flex-shrink: 0;
+    }
+    .flow-node.highlight { border-color: var(--indigo-500); background: var(--indigo-50); }
+
+    /* ── Step list ── */
+    .steps { counter-reset: step; list-style: none; }
+    .steps li {
+      position: relative; padding-left: 3.5rem; padding-bottom: 2rem;
+      border-left: 2px solid var(--indigo-200); margin-left: 1rem;
+    }
+    .steps li:last-child { border-left-color: transparent; padding-bottom: 0; }
+    .steps li::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute; left: -1rem; top: 0;
+      width: 2rem; height: 2rem; border-radius: 50%;
+      background: var(--indigo-600); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; font-weight: 700;
+    }
+    .steps li h4 { font-weight: 600; margin-bottom: .25rem; }
+    .steps li p { color: var(--gray-500); font-size: .92rem; }
+
+    /* ── Code block ── */
+    .code-block {
+      background: var(--gray-800); color: #e5e7eb; border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: .85rem; line-height: 1.7; overflow-x: auto;
+      border: 1px solid var(--gray-700);
+    }
+    .code-block .comment { color: #6b7280; }
+    .code-block .cmd { color: var(--green-400); }
+    .code-block .flag { color: var(--amber-400); }
+
+    /* ── Color key (legend) ── */
+    .legend {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+      padding: 1rem 1.25rem; background: var(--gray-100);
+      border-radius: var(--radius-sm); margin-top: 1rem;
+    }
+    .legend-item { display: flex; align-items: center; gap: .4rem; font-size: .85rem; }
+    .legend-dot {
+      width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0;
+    }
+
+    /* ── Table ── */
+    .nice-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    .nice-table th {
+      text-align: left; padding: .75rem 1rem;
+      background: var(--gray-100); font-weight: 600;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    .nice-table td {
+      padding: .75rem 1rem; border-bottom: 1px solid var(--gray-100);
+    }
+    .nice-table tr:hover td { background: var(--gray-50); }
+    .nice-table code {
+      background: var(--indigo-50); color: var(--indigo-700);
+      padding: .15rem .4rem; border-radius: 4px; font-size: .82rem;
+    }
+
+    /* ── Tag / pill ── */
+    .pill {
+      display: inline-block; padding: .2rem .6rem; border-radius: 999px;
+      font-size: .75rem; font-weight: 600;
+    }
+    .pill-green { background: var(--green-100); color: var(--green-600); }
+    .pill-amber { background: var(--amber-100); color: var(--amber-500); }
+    .pill-red { background: var(--red-100); color: var(--red-500); }
+    .pill-indigo { background: var(--indigo-100); color: var(--indigo-600); }
+    .pill-purple { background: var(--purple-100); color: var(--purple-600); }
+
+    /* ── Security shield ── */
+    .shield-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .shield-item {
+      background: white; border: 1px solid var(--gray-200); border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem; display: flex; align-items: flex-start; gap: .75rem;
+    }
+    .shield-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--green-50); color: var(--green-600);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .shield-item strong { display: block; font-size: .9rem; }
+    .shield-item span { font-size: .8rem; color: var(--gray-500); }
+
+    /* ── Viz demo strip ── */
+    .viz-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .viz-demo {
+      background: white; border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm); overflow: hidden;
+    }
+    .viz-demo-canvas {
+      height: 120px; display: flex; align-items: flex-end;
+      justify-content: center; gap: 3px; padding: 12px 16px;
+    }
+    .viz-bar {
+      border-radius: 3px 3px 0 0; min-width: 8px; transition: height .3s, background .3s;
+    }
+    .viz-demo-label {
+      padding: .5rem .75rem; border-top: 1px solid var(--gray-100);
+      font-size: .8rem; font-weight: 600; color: var(--gray-700); text-align: center;
+    }
+    .viz-grid-canvas {
+      height: 120px; display: grid; grid-template-columns: repeat(8, 1fr);
+      gap: 2px; padding: 12px 16px;
+    }
+    .viz-cell { border-radius: 2px; }
+    .viz-node-canvas {
+      height: 120px; position: relative; padding: 12px;
+    }
+    .viz-node {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .65rem; font-weight: 700; position: absolute;
+      border: 2px solid var(--gray-300);
+    }
+    .viz-dp-canvas {
+      height: 120px; display: grid; grid-template-columns: repeat(6, 1fr);
+      gap: 2px; padding: 16px;
+    }
+    .viz-dp-cell {
+      background: var(--indigo-50); border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .65rem; font-weight: 600; color: var(--indigo-700);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--gray-800); color: var(--gray-400);
+      padding: 3rem 2rem; text-align: center; font-size: .85rem;
+    }
+    footer a { color: var(--indigo-400); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2rem; }
+      .hero p { font-size: 1rem; }
+      .flow { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); }
+      .viz-strip { grid-template-columns: repeat(2, 1fr); }
+      section { padding: 3rem 0; }
+    }
+    @media (max-width: 480px) {
+      .viz-strip { grid-template-columns: 1fr; }
+      .card-grid-3, .card-grid-4 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════ HERO ════════════════════════════════════════════ -->
+<header class="hero">
+  <div class="hero-content">
+    <h1>AlgoLearn</h1>
+    <p>An interactive platform for learning algorithms through step-by-step visualizations and hands-on coding challenges. Runs entirely on your machine.</p>
+    <div class="hero-badges">
+      <span class="hero-badge">TypeScript</span>
+      <span class="hero-badge">React 19</span>
+      <span class="hero-badge">D3.js</span>
+      <span class="hero-badge">Monaco Editor</span>
+      <span class="hero-badge">Fastify</span>
+      <span class="hero-badge">Docker Sandbox</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ════════════════════════════════════════ OVERVIEW ══════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Overview</div>
+  <h2 class="section-title">What does AlgoLearn do?</h2>
+  <p class="section-subtitle">AlgoLearn combines three things that make algorithm learning click: watching them run, writing your own code, and getting instant feedback — all in one place.</p>
+
+  <div class="card-grid card-grid-3">
+    <div class="card">
+      <div class="card-icon" style="background: var(--purple-50); color: var(--purple-500);">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-8"/></svg>
+      </div>
+      <h3>Watch Algorithms Run</h3>
+      <p>Step through sorting, graph traversal, dynamic programming, and pathfinding algorithms with animated visuals. Pause, rewind, speed up — you're in control.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background: var(--indigo-50); color: var(--indigo-500);">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+      </div>
+      <h3>Write &amp; Test Code</h3>
+      <p>Solve problems in a professional code editor with TypeScript support. Submit your solution and see test results instantly — just like a real coding interview.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background: var(--green-50); color: var(--green-500);">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg>
+      </div>
+      <h3>Track Your Progress</h3>
+      <p>See which problems you've solved, attempted, or haven't tried yet. The dashboard gives you a bird's-eye view of your learning journey.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ ARCHITECTURE ══════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Architecture</div>
+  <h2 class="section-title">How the pieces fit together</h2>
+  <p class="section-subtitle">Three services work in concert. The browser talks to the API, which talks to Docker when it needs to run your code safely.</p>
+
+  <div class="flow">
+    <div class="flow-node highlight">
+      <strong>Browser</strong>
+      <span>React + D3.js + Monaco</span>
+    </div>
+    <div class="flow-arrow">&#10142;</div>
+    <div class="flow-node">
+      <strong>API Server</strong>
+      <span>Fastify + SQLite</span>
+    </div>
+    <div class="flow-arrow">&#10142;</div>
+    <div class="flow-node">
+      <strong>Docker Runner</strong>
+      <span>Sandboxed execution</span>
+    </div>
+  </div>
+
+  <div class="card-grid card-grid-3" style="margin-top: 2rem;">
+    <div class="card">
+      <h3 style="color: var(--indigo-600);">Frontend</h3>
+      <p>Built with <strong>React 19</strong> and <strong>Vite</strong>. Algorithm visualizations are powered by <strong>D3.js</strong>, the code editor uses <strong>Monaco</strong> (the engine behind VS Code), and state is managed with <strong>Zustand</strong>. Styled with <strong>Tailwind CSS</strong>.</p>
+    </div>
+    <div class="card">
+      <h3 style="color: var(--indigo-600);">API</h3>
+      <p>A <strong>Fastify</strong> server exposes REST endpoints for problems, submissions, and progress. Data lives in a local <strong>SQLite</strong> database managed through <strong>Drizzle ORM</strong>. No external database setup needed.</p>
+    </div>
+    <div class="card">
+      <h3 style="color: var(--indigo-600);">Runner</h3>
+      <p>Your submitted code runs inside a <strong>Docker container</strong> that is locked down tight — no internet, limited memory, and auto-destroyed after each run. It's as safe as it gets.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ VISUALIZATIONS ════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Visualizations</div>
+  <h2 class="section-title">See algorithms come alive</h2>
+  <p class="section-subtitle">Each algorithm is implemented as a generator function that captures a snapshot at every meaningful step. A playback engine lets you scrub through these snapshots while D3.js animates the transitions.</p>
+
+  <!-- Mini demos -->
+  <div class="viz-strip">
+    <!-- Sorting bars -->
+    <div class="viz-demo">
+      <div class="viz-demo-canvas">
+        <div class="viz-bar" style="height:30%; width:12%; background:var(--green-400);"></div>
+        <div class="viz-bar" style="height:45%; width:12%; background:var(--green-400);"></div>
+        <div class="viz-bar" style="height:55%; width:12%; background:var(--amber-400);"></div>
+        <div class="viz-bar" style="height:60%; width:12%; background:var(--amber-400);"></div>
+        <div class="viz-bar" style="height:72%; width:12%; background:var(--indigo-400);"></div>
+        <div class="viz-bar" style="height:85%; width:12%; background:var(--indigo-400);"></div>
+        <div class="viz-bar" style="height:95%; width:12%; background:var(--indigo-400);"></div>
+      </div>
+      <div class="viz-demo-label">Sorting</div>
+    </div>
+
+    <!-- Graph nodes -->
+    <div class="viz-demo">
+      <div class="viz-node-canvas">
+        <div class="viz-node" style="left:42%; top:8%; background:var(--green-400); border-color:var(--green-600);">A</div>
+        <div class="viz-node" style="left:18%; top:42%; background:var(--amber-400); border-color:var(--amber-500);">B</div>
+        <div class="viz-node" style="left:65%; top:38%; background:var(--amber-400); border-color:var(--amber-500);">C</div>
+        <div class="viz-node" style="left:30%; top:72%; background:var(--gray-200);">D</div>
+        <div class="viz-node" style="left:58%; top:72%; background:var(--gray-200);">E</div>
+      </div>
+      <div class="viz-demo-label">Graph Traversal</div>
+    </div>
+
+    <!-- DP table -->
+    <div class="viz-demo">
+      <div class="viz-dp-canvas">
+        <div class="viz-dp-cell">0</div><div class="viz-dp-cell">0</div><div class="viz-dp-cell">0</div>
+        <div class="viz-dp-cell">0</div><div class="viz-dp-cell">0</div><div class="viz-dp-cell">0</div>
+        <div class="viz-dp-cell">0</div><div class="viz-dp-cell">1</div><div class="viz-dp-cell">1</div>
+        <div class="viz-dp-cell">0</div><div class="viz-dp-cell">1</div><div class="viz-dp-cell" style="background:var(--indigo-400); color:white;">1</div>
+        <div class="viz-dp-cell">0</div><div class="viz-dp-cell">1</div><div class="viz-dp-cell">1</div>
+        <div class="viz-dp-cell">0</div><div class="viz-dp-cell">1</div><div class="viz-dp-cell" style="background:var(--amber-100);">2</div>
+      </div>
+      <div class="viz-demo-label">Dynamic Programming</div>
+    </div>
+
+    <!-- Pathfinding grid -->
+    <div class="viz-demo">
+      <div class="viz-grid-canvas">
+        <div class="viz-cell" style="background:var(--indigo-400);"></div>
+        <div class="viz-cell" style="background:var(--indigo-200);"></div>
+        <div class="viz-cell" style="background:var(--indigo-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-200);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+
+        <div class="viz-cell" style="background:var(--gray-200);"></div>
+        <div class="viz-cell" style="background:var(--indigo-200);"></div>
+        <div class="viz-cell" style="background:var(--gray-200);"></div>
+        <div class="viz-cell" style="background:var(--gray-800);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+
+        <div class="viz-cell" style="background:var(--gray-200);"></div>
+        <div class="viz-cell" style="background:var(--gray-200);"></div>
+        <div class="viz-cell" style="background:var(--green-400);"></div>
+        <div class="viz-cell" style="background:var(--green-400);"></div>
+        <div class="viz-cell" style="background:var(--green-400);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-800);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--green-400);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--gray-100);"></div>
+        <div class="viz-cell" style="background:var(--green-400);"></div>
+        <div class="viz-cell" style="background:var(--red-400);"></div>
+      </div>
+      <div class="viz-demo-label">Pathfinding</div>
+    </div>
+  </div>
+
+  <!-- How it works under the hood -->
+  <div style="margin-top: 2.5rem;">
+    <h3 style="font-size: 1.15rem; font-weight: 600; margin-bottom: 1.5rem;">How visualizations work under the hood</h3>
+
+    <div class="flow" style="margin-bottom: 2rem;">
+      <div class="flow-node">
+        <strong>Generator Function</strong>
+        <span>Pure algorithm logic</span>
+      </div>
+      <div class="flow-arrow">yields &rarr;</div>
+      <div class="flow-node">
+        <strong>Step Array</strong>
+        <span>[Step&#8321;, Step&#8322;, &hellip; Step&#8345;]</span>
+      </div>
+      <div class="flow-arrow">drives &rarr;</div>
+      <div class="flow-node">
+        <strong>Playback Hook</strong>
+        <span>Index + controls</span>
+      </div>
+      <div class="flow-arrow">renders &rarr;</div>
+      <div class="flow-node highlight">
+        <strong>D3.js Canvas</strong>
+        <span>Animated SVG</span>
+      </div>
+    </div>
+
+    <ol class="steps">
+      <li>
+        <h4>Generator captures every step</h4>
+        <p>Each algorithm is written as a JavaScript generator function. At every meaningful moment — a comparison, a swap, a node visit — the function <em>yields</em> a complete snapshot of its current state (the array, which elements are being compared, which are sorted, etc.).</p>
+      </li>
+      <li>
+        <h4>Steps are collected into an array</h4>
+        <p>When you click "Run", the generator is consumed eagerly and all snapshots are stored in an array. Because the data is small (a few hundred steps for typical inputs), this is near-instant.</p>
+      </li>
+      <li>
+        <h4>Playback hook controls the timeline</h4>
+        <p>A React hook tracks the current step index, play/pause state, and speed. Playing simply increments the index on a timer. Going backward? Just decrement. Jump to any step? Set the index. No undo logic required.</p>
+      </li>
+      <li>
+        <h4>D3.js animates between states</h4>
+        <p>Each visualizer component receives the current step and uses D3's data-join pattern to smoothly transition SVG elements — bars slide into position, nodes change color, grid cells light up. React owns the <code>&lt;svg&gt;</code> container; D3 owns everything inside it.</p>
+      </li>
+    </ol>
+  </div>
+
+  <!-- Color legend -->
+  <h3 style="font-size: 1rem; font-weight: 600; margin-top: 2rem; margin-bottom: .5rem;">Color legend for sorting visualization</h3>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background: #60a5fa;"></div> Default</div>
+    <div class="legend-item"><div class="legend-dot" style="background: #facc15;"></div> Comparing</div>
+    <div class="legend-item"><div class="legend-dot" style="background: #f87171;"></div> Swapping</div>
+    <div class="legend-item"><div class="legend-dot" style="background: #c084fc;"></div> Pivot</div>
+    <div class="legend-item"><div class="legend-dot" style="background: #4ade80;"></div> Sorted</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ ALGORITHMS ════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Algorithm Library</div>
+  <h2 class="section-title">10 algorithms, 4 categories</h2>
+  <p class="section-subtitle">Each algorithm has a visualization, a practice problem, and test cases. Here's the full lineup.</p>
+
+  <div class="card-grid card-grid-4">
+    <div class="card" style="border-top: 3px solid var(--indigo-400);">
+      <h3>Bubble Sort</h3>
+      <p>Compare neighbors, swap if needed, repeat.</p>
+      <div style="margin-top: .75rem;">
+        <span class="pill pill-green">Easy</span>
+        <span style="font-size: .75rem; color: var(--gray-400); margin-left: .5rem;">O(n&sup2;)</span>
+      </div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--indigo-400);">
+      <h3>Quick Sort</h3>
+      <p>Pick a pivot, partition, recurse on each side.</p>
+      <div style="margin-top: .75rem;">
+        <span class="pill pill-amber">Medium</span>
+        <span style="font-size: .75rem; color: var(--gray-400); margin-left: .5rem;">O(n log n)</span>
+      </div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--indigo-400);">
+      <h3>Merge Sort</h3>
+      <p>Divide in half, sort each, merge together.</p>
+      <div style="margin-top: .75rem;">
+        <span class="pill pill-amber">Medium</span>
+        <span style="font-size: .75rem; color: var(--gray-400); margin-left: .5rem;">O(n log n)</span>
+      </div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--purple-400);">
+      <h3>BFS</h3>
+      <p>Explore level by level using a queue.</p>
+      <div style="margin-top: .75rem;">
+        <span class="pill pill-amber">Medium</span>
+        <span style="font-size: .75rem; color: var(--gray-400); margin-left: .5rem;">O(V+E)</span>
+      </div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--purple-400);">
+      <h3>DFS</h3>
+      <p>Go deep first, backtrack when stuck.</p>
+      <div style="margin-top: .75rem;">
+        <span class="pill pill-amber">Medium</span>
+        <span style="font-size: .75rem; color: var(--gray-400); margin-left: .5rem;">O(V+E)</span>
+      </div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--green-400);">
+      <h3>Fibonacci DP</h3>
+      <p>Build the answer bottom-up in a table.</p>
+      <div style="margin-top: .75rem;">
+        <span class="pill pill-green">Easy</span>
+        <span style="font-size: .75rem; color: var(--gray-400); margin-left: .5rem;">O(n)</span>
+      </div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--green-400);">
+      <h3>0/1 Knapsack</h3>
+      <p>Maximize value within a weight limit.</p>
+      <div style="margin-top: .75rem;">
+        <span class="pill pill-red">Hard</span>
+        <span style="font-size: .75rem; color: var(--gray-400); margin-left: .5rem;">O(nW)</span>
+      </div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--green-400);">
+      <h3>LCS</h3>
+      <p>Find the longest shared subsequence.</p>
+      <div style="margin-top: .75rem;">
+        <span class="pill pill-amber">Medium</span>
+        <span style="font-size: .75rem; color: var(--gray-400); margin-left: .5rem;">O(mn)</span>
+      </div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--amber-400);">
+      <h3>Dijkstra</h3>
+      <p>Shortest path in a weighted graph.</p>
+      <div style="margin-top: .75rem;">
+        <span class="pill pill-red">Hard</span>
+        <span style="font-size: .75rem; color: var(--gray-400); margin-left: .5rem;">O((V+E) log V)</span>
+      </div>
+    </div>
+    <div class="card" style="border-top: 3px solid var(--amber-400);">
+      <h3>A* Search</h3>
+      <p>Heuristic-guided shortest path.</p>
+      <div style="margin-top: .75rem;">
+        <span class="pill pill-red">Hard</span>
+        <span style="font-size: .75rem; color: var(--gray-400); margin-left: .5rem;">O((V+E) log V)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ CODE EXECUTION ════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Code Execution</div>
+  <h2 class="section-title">How your code gets run</h2>
+  <p class="section-subtitle">When you hit "Submit", your code takes a short but carefully guarded journey from the editor to the results panel.</p>
+
+  <ol class="steps">
+    <li>
+      <h4>You write your solution</h4>
+      <p>The Monaco editor gives you a professional TypeScript editing experience — autocomplete, syntax highlighting, error squiggles — right in the browser.</p>
+    </li>
+    <li>
+      <h4>Your code is sent to the API</h4>
+      <p>The frontend sends your code and the problem ID to the API server over a simple HTTP request. The API looks up the problem's test cases from the database.</p>
+    </li>
+    <li>
+      <h4>A sandbox container is created</h4>
+      <p>The API writes your code to a temporary directory and spins up a brand-new Docker container with strict security settings (more on that below). Your code is mounted read-only.</p>
+    </li>
+    <li>
+      <h4>The test harness runs your code</h4>
+      <p>Inside the container, a test harness imports your function, feeds it each test case's input, compares the output to the expected answer, and measures execution time.</p>
+    </li>
+    <li>
+      <h4>Results come back</h4>
+      <p>The container outputs structured JSON with pass/fail for each test case. The API parses this, saves the submission to the database, updates your progress, and sends the results to the browser. The container is destroyed.</p>
+    </li>
+  </ol>
+</section>
+
+<!-- ════════════════════════════════════ SECURITY ══════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Security</div>
+  <h2 class="section-title">The sandbox keeps things safe</h2>
+  <p class="section-subtitle">Running user code is inherently risky. AlgoLearn uses multiple layers of Docker-based isolation so submitted code can't harm your machine.</p>
+
+  <div class="shield-grid">
+    <div class="shield-item">
+      <div class="shield-icon">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+      </div>
+      <div>
+        <strong>No network</strong>
+        <span>Container cannot reach the internet or any other service</span>
+      </div>
+    </div>
+    <div class="shield-item">
+      <div class="shield-icon">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      </div>
+      <div>
+        <strong>Read-only filesystem</strong>
+        <span>Only a tiny 16 MB temp area is writable</span>
+      </div>
+    </div>
+    <div class="shield-item">
+      <div class="shield-icon">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      </div>
+      <div>
+        <strong>Resource limits</strong>
+        <span>128 MB RAM, half a CPU, 64 processes max</span>
+      </div>
+    </div>
+    <div class="shield-item">
+      <div class="shield-icon">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <div>
+        <strong>10-second timeout</strong>
+        <span>Container is killed after 10 seconds no matter what</span>
+      </div>
+    </div>
+    <div class="shield-item">
+      <div class="shield-icon">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      </div>
+      <div>
+        <strong>Non-root user</strong>
+        <span>Code runs as an unprivileged user with no-new-privileges</span>
+      </div>
+    </div>
+    <div class="shield-item">
+      <div class="shield-icon">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      </div>
+      <div>
+        <strong>Auto-cleanup</strong>
+        <span>Container is force-removed and temp files deleted after every run</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ API ═══════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">API</div>
+  <h2 class="section-title">REST endpoints</h2>
+  <p class="section-subtitle">The API is straightforward — seven endpoints cover everything the frontend needs.</p>
+
+  <div style="overflow-x: auto;">
+    <table class="nice-table">
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Endpoint</th>
+          <th>What it does</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>GET</code></td>
+          <td><code>/api/categories</code></td>
+          <td>Lists all algorithm categories (Sorting, Graph, DP, Pathfinding)</td>
+        </tr>
+        <tr>
+          <td><code>GET</code></td>
+          <td><code>/api/problems</code></td>
+          <td>Lists problems, optionally filtered by category or difficulty</td>
+        </tr>
+        <tr>
+          <td><code>GET</code></td>
+          <td><code>/api/problems/:slug</code></td>
+          <td>Fetches a single problem with its description, starter code, and visible test cases</td>
+        </tr>
+        <tr>
+          <td><code>POST</code></td>
+          <td><code>/api/submissions</code></td>
+          <td>Submits your code — runs it in the sandbox and returns pass/fail results</td>
+        </tr>
+        <tr>
+          <td><code>GET</code></td>
+          <td><code>/api/submissions/:id</code></td>
+          <td>Retrieves the result of a previous submission</td>
+        </tr>
+        <tr>
+          <td><code>GET</code></td>
+          <td><code>/api/progress</code></td>
+          <td>Returns your solve status for all problems</td>
+        </tr>
+        <tr>
+          <td><code>GET</code></td>
+          <td><code>/api/health</code></td>
+          <td>Health check — returns <code>{"status":"ok"}</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ PROJECT STRUCTURE ═════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Project Structure</div>
+  <h2 class="section-title">What's in each package</h2>
+  <p class="section-subtitle">The project is a pnpm monorepo with four packages. Here's a map of what lives where.</p>
+
+  <div class="card-grid card-grid-2">
+    <div class="card">
+      <h3><span class="pill pill-indigo" style="margin-right:.5rem">shared</span> Type Definitions</h3>
+      <p style="margin-top:.5rem">Problem, TestCase, Submission, and UserProgress types. Visualization step interfaces for all four algorithm categories. API request/response DTOs. Shared by both frontend and API.</p>
+    </div>
+    <div class="card">
+      <h3><span class="pill pill-purple" style="margin-right:.5rem">frontend</span> User Interface</h3>
+      <p style="margin-top:.5rem"><strong>algorithms/</strong> — 10 generator functions<br>
+      <strong>components/</strong> — Dashboard, problem list, editor, 4 D3 visualizers, playback controls<br>
+      <strong>hooks/</strong> — useVisualization playback engine<br>
+      <strong>stores/</strong> — Zustand for problems &amp; visualization state</p>
+    </div>
+    <div class="card">
+      <h3><span class="pill pill-green" style="margin-right:.5rem">api</span> Backend Server</h3>
+      <p style="margin-top:.5rem"><strong>routes/</strong> — Problems and submissions endpoints<br>
+      <strong>services/</strong> — Docker code runner orchestration<br>
+      <strong>db/</strong> — Drizzle schema, SQLite migrations<br>
+      <strong>seed/</strong> — 9 built-in problems with test cases</p>
+    </div>
+    <div class="card">
+      <h3><span class="pill pill-amber" style="margin-right:.5rem">runner</span> Execution Sandbox</h3>
+      <p style="margin-top:.5rem">A minimal Node.js Alpine Docker image. Contains a test harness that imports the user's function, runs it against test cases, catches errors, measures time, and outputs JSON. Stripped of everything unnecessary.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════ GETTING STARTED ═══════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Getting Started</div>
+  <h2 class="section-title">Run it on your machine</h2>
+  <p class="section-subtitle">Everything runs locally. No accounts, no cloud services, no subscriptions. Just your machine, Node.js, and Docker.</p>
+
+  <div class="card-grid card-grid-2">
+    <div class="card">
+      <h3 style="margin-bottom: 1rem;">Option A &mdash; Development mode</h3>
+      <div class="code-block">
+        <span class="comment"># Install dependencies</span><br>
+        <span class="cmd">pnpm install</span><br><br>
+        <span class="comment"># Build the sandbox image (one time)</span><br>
+        <span class="cmd">docker build</span> <span class="flag">-t</span> algo-learn-runner:latest packages/runner<br><br>
+        <span class="comment"># Seed the database with problems</span><br>
+        <span class="cmd">pnpm</span> <span class="flag">--filter</span> api db:seed<br><br>
+        <span class="comment"># Start dev servers with hot reload</span><br>
+        <span class="cmd">pnpm run dev</span>
+      </div>
+      <p style="margin-top: 1rem; font-size: .85rem; color: var(--gray-500);">
+        Frontend at <strong>localhost:3000</strong> &nbsp;|&nbsp; API at <strong>localhost:3001</strong>
+      </p>
+    </div>
+    <div class="card">
+      <h3 style="margin-bottom: 1rem;">Option B &mdash; Docker Compose</h3>
+      <div class="code-block">
+        <span class="comment"># Build and start everything</span><br>
+        <span class="cmd">docker compose up</span> <span class="flag">--build</span>
+      </div>
+      <p style="margin-top: 1rem; font-size: .85rem; color: var(--gray-500);">
+        Frontend at <strong>localhost:3000</strong> &nbsp;|&nbsp; API at <strong>localhost:3001</strong>
+      </p>
+      <div style="margin-top:1.5rem; padding: 1rem; background: var(--amber-50); border-radius: var(--radius-sm); border: 1px solid var(--amber-100);">
+        <strong style="font-size: .85rem; color: var(--amber-500);">Prerequisites</strong>
+        <p style="font-size: .85rem; color: var(--gray-600); margin-top: .25rem;">Node.js 20+, pnpm 9+, and Docker must be installed.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size: 1rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 1rem;">All available commands</h3>
+  <div style="overflow-x: auto;">
+    <table class="nice-table">
+      <thead>
+        <tr><th>Command</th><th>What it does</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>make install</code></td><td>Install all dependencies</td></tr>
+        <tr><td><code>make dev</code></td><td>Start frontend + API in development mode</td></tr>
+        <tr><td><code>make dev-frontend</code></td><td>Start only the frontend</td></tr>
+        <tr><td><code>make dev-api</code></td><td>Start only the API</td></tr>
+        <tr><td><code>make build-runner</code></td><td>Build the Docker runner image</td></tr>
+        <tr><td><code>make seed</code></td><td>Populate the database with problems</td></tr>
+        <tr><td><code>make test</code></td><td>Run all unit tests</td></tr>
+        <tr><td><code>make typecheck</code></td><td>TypeScript type checking</td></tr>
+        <tr><td><code>make lint</code></td><td>Run the linter</td></tr>
+        <tr><td><code>make docker-up</code></td><td>Start everything via Docker Compose</td></tr>
+        <tr><td><code>make docker-down</code></td><td>Stop Docker Compose services</td></tr>
+        <tr><td><code>make clean</code></td><td>Remove all build artifacts and node_modules</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ CI/CD ═════════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">CI / CD</div>
+  <h2 class="section-title">Automated quality checks</h2>
+  <p class="section-subtitle">Every push and pull request to <code>main</code> triggers a GitHub Actions pipeline with three jobs.</p>
+
+  <div class="card-grid card-grid-3">
+    <div class="card" style="text-align:center;">
+      <div class="card-icon" style="background: var(--indigo-50); color: var(--indigo-500); margin: 0 auto 1rem;">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      </div>
+      <h3>Lint &amp; Typecheck</h3>
+      <p>ESLint and <code>tsc --noEmit</code> across all packages. Catches style issues and type errors before they merge.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-icon" style="background: var(--green-50); color: var(--green-500); margin: 0 auto 1rem;">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <h3>Unit Tests</h3>
+      <p>Vitest runs across all packages. Algorithm generators, API routes, and components are all covered.</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-icon" style="background: var(--purple-50); color: var(--purple-500); margin: 0 auto 1rem;">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+      </div>
+      <h3>Integration Tests</h3>
+      <p>Builds the runner image and runs end-to-end tests that submit code through the API into real Docker containers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ TECH STACK ════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Tech Stack</div>
+  <h2 class="section-title">Built with</h2>
+  <p class="section-subtitle">All open source. All runs locally. TypeScript end-to-end.</p>
+
+  <div class="card-grid card-grid-4">
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">React 19</strong>
+      <p style="font-size: .8rem;">UI framework</p>
+    </div>
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">Vite</strong>
+      <p style="font-size: .8rem;">Build tool</p>
+    </div>
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">D3.js</strong>
+      <p style="font-size: .8rem;">Visualization</p>
+    </div>
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">Monaco</strong>
+      <p style="font-size: .8rem;">Code editor</p>
+    </div>
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">Fastify</strong>
+      <p style="font-size: .8rem;">API server</p>
+    </div>
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">Drizzle</strong>
+      <p style="font-size: .8rem;">ORM</p>
+    </div>
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">SQLite</strong>
+      <p style="font-size: .8rem;">Database</p>
+    </div>
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">Docker</strong>
+      <p style="font-size: .8rem;">Sandbox</p>
+    </div>
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">Zustand</strong>
+      <p style="font-size: .8rem;">State management</p>
+    </div>
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">Tailwind</strong>
+      <p style="font-size: .8rem;">Styling</p>
+    </div>
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">Vitest</strong>
+      <p style="font-size: .8rem;">Testing</p>
+    </div>
+    <div class="card" style="text-align:center; padding: 1.25rem;">
+      <strong style="color: var(--indigo-600);">pnpm</strong>
+      <p style="font-size: .8rem;">Monorepo</p>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.container -->
+
+<footer>
+  <p><strong>AlgoLearn</strong> &mdash; Interactive Algorithm Learning Platform</p>
+  <p style="margin-top: .5rem;">Built with TypeScript &nbsp;&bull;&nbsp; 100% local &nbsp;&bull;&nbsp; Open source</p>
+</footer>
+
+</body>
+</html>
