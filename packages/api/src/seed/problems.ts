@@ -1,5 +1,3 @@
-import type { Category } from "@algo-learn/shared";
-
 export const seedCategories = [
   { name: "Sorting", slug: "sorting" },
   { name: "Graph Traversal", slug: "graph" },

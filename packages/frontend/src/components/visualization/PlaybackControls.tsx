@@ -36,7 +36,7 @@ export function PlaybackControls({
       switch (e.key) {
         case " ":
           e.preventDefault();
-          isPlaying ? onPause() : onPlay();
+          if (isPlaying) { onPause(); } else { onPlay(); }
           break;
         case "ArrowRight":
           e.preventDefault();

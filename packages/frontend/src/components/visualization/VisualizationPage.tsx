@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useVisualization } from "../../hooks/useVisualization";
 import { PlaybackControls } from "./PlaybackControls";
@@ -26,6 +26,7 @@ interface AlgorithmConfig {
   name: string;
   category: AlgorithmCategory;
   defaultInput: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   createGenerator: (input: string) => Generator<any, void, undefined>;
 }
 
@@ -121,6 +122,7 @@ export function VisualizationPage() {
   const config = algorithm ? algorithms[algorithm] : null;
 
   const [input, setInput] = useState(config?.defaultInput || "");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const viz = useVisualization<any>();
 
   useEffect(() => {

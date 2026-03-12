@@ -1,10 +1,5 @@
 import type { PathfindingStep, CellState, AlgorithmGenerator } from "../types";
 
-interface WeightedEdge {
-  node: string;
-  weight: number;
-}
-
 export function* dijkstraViz(
   gridRows: number,
   gridCols: number,
